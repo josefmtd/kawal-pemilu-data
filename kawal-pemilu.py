@@ -2,10 +2,21 @@ import urllib.request
 import json
 import time
 
-url = "http://kawal-c1.appspot.com/api/c/0?" + str(int(time.time()*1000))
+class KawalPemilu:
+	def __init__(self):
+		self.idTPS = []
+		self.nolSatu = []
+		self.nolDua = []
+		self.suaraSah = []
+	
+	def getKawalPemiluJSON(self,id,timenow):
+		urlAPI = "http://kawal-c1.appspot.com/api/c/" + str(id) + "?" + str(timenow)
+		readURL = urllib.request.urlopen(urlAPI)
+		data = json.loads(readURL.read())
+		return data	
 
-print(url)
+idTPS = 1
+dataNow = KawalPemilu()
+waktuNow = int(time.time()*1000)
 
-with urllib.request.urlopen(url) as link:
-	data = json.loads(link.read().decode())
-	print(data)
+print(dataNow.getKawalPemiluJSON(idTPS, waktuNow))
