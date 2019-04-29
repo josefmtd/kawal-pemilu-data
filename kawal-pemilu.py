@@ -4,24 +4,50 @@ import time
 
 class KawalPemilu:
     def __init__(self):
+        self.timeNow = time.time()*1000
         self.idTPS = []
         self.nolSatu = []
         self.nolDua = []
         self.suaraSah = []
 
-    def getKawalPemiluJSON(self,id,timenow):
-        urlAPI = "http://kawal-c1.appspot.com/api/c/" + str(id) + "?" + str(timenow)
+    def getKawalPemiluJSON(self,id):
+        urlAPI = "http://kawal-c1.appspot.com/api/c/" + str(id) + "?" + str(self.timeNow)
         readURL = urllib.request.urlopen(urlAPI)
         data = json.loads(readURL.read())
         return data 
-    
+
+    def getKecamatanData(self,id):
+        dataKecamatan = self.getKawalPemiluJSON(id)
+        if dataKecamatan['depth'] == 3:
+            listKelurahan = self.getKelurahanID(dataKecamatan['children'])
+            for kelurahan in listKelurahan:
+                self.getKelurahanData(kelurahan)
+        elif dataKecamatan is None:
+            print("Error: ID tidak ada")
+        else:
+            print("Error: ID bukan Kecamatan")
+
+    def getKelurahanID(self,kecamatanDataChildren):
+        listKelurahan = []
+        for x in kecamatanDataChildren:
+            listKelurahan.append(x[0])
+        return listKelurahan
+
+    def getKelurahanData(self,id):
+        dataKelurahan = self.getKawalPemiluJSON(id)
+        if dataKelurahan['depth'] == 4:
+            print(dataKelurahan['children'])
+        elif dataKelurahan is None:
+            print("Error: ID tidak ada")
+        else:
+            print("Error: ID bukan Kelurahan")
+
     def getDataTPSDaerah(totalTPS):
         dataTpsDaerah = []
         for x in range(totalTPS):
             idTPS = x
             dataNow = KawalPemilu()
-            waktuNow = int(time.time()*1000)
-            dummyData = dataNow.getKawalPemiluJSON(idTPS, waktuNow)
+            dummyData = dataNow.getKawalPemiluJSON(idTPS)
             print(idTPS)
             if not dummyData:
                 continue
