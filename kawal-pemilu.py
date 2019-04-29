@@ -25,7 +25,7 @@ class KawalPemilu:
             print(idTPS)
             if not dummyData:
                 continue
-            if len(dummyData['parentIds']) == 4:
+            if dummyData['depth'] == 4:
                 dataTpsDaerah.append(dummyData)
         return dataTpsDaerah
     
@@ -34,16 +34,17 @@ class KawalPemilu:
         for y in range(len(dataTPSDaerah)):
             dataName = dataTPSDaerah[y]['name']
             data = dataTPSDaerah[y]['data']
-            #dataTps.append(dataName)
-            #print(dataTps)
-            for x in range(len(data)):
-                dataTps.append([str(dataTPSDaerah[y]['parentNames'][1]+" " +dataName + str(x+1)),data[str(x+1)]['sum']['pas1'], data[str(x+1)]['sum']['pas2']])
+            print(y, dataName, data)
+            for x in data:
+                if 'pas1' not in data[x]['sum']:
+                    continue
+                if 'pas2' not in data[x]['sum']:
+                    continue
+                provinsi = str(dataTPSDaerah[y]['parentNames'][1])
+                kabupaten = str(dataTPSDaerah[y]['parentNames'][2])
+                wilayah = str(dataTPSDaerah[y]['parentNames'][3])
+                daerahTps = str(dataName + " "+ x)
+                suaraPas1 = data[x]['sum']['pas1']
+                suaraPas2 = data[x]['sum']['pas2']
+                dataTps.append([provinsi, kabupaten, wilayah, daerahTps ,suaraPas1, suaraPas2])
         return dataTps
-
-
-
-#usage
-
-testData = KawalPemilu.getDataTPSDaerah(10)
-
-data = KawalPemilu.getKawalPemiluDataSuaraTpsPerDaerah(testData)
