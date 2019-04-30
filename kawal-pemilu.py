@@ -47,10 +47,13 @@ class KawalPemilu:
 
     def parseTPSData(self,dataKelurahan,namaKelurahan,listTPS):
         for x in listTPS:
-            self.idTPS.append(namaKelurahan + str(x))
-            self.nolSatu.append(dataKelurahan[str(x)]['sum']['pas1'])
-            self.nolDua.append(dataKelurahan[str(x)]['sum']['pas2'])
-            self.suaraSah.append(dataKelurahan[str(x)]['sum']['sah'])
+            try:
+                self.idTPS.append(namaKelurahan + str(x))
+                self.nolSatu.append(dataKelurahan[str(x)]['sum']['pas1'])
+                self.nolDua.append(dataKelurahan[str(x)]['sum']['pas2'])
+                self.suaraSah.append(dataKelurahan[str(x)]['sum']['sah'])
+            except KeyError:
+                continue
 
     def getDataTPSDaerah(totalTPS):
         dataTpsDaerah = []
