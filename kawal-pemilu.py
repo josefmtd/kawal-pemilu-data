@@ -36,7 +36,11 @@ class KawalPemilu:
     def getKelurahanData(self,id):
         dataKelurahan = self.getKawalPemiluJSON(id)
         if dataKelurahan['depth'] == 4:
-            print(dataKelurahan['children'])
+            #print("Ada", str(len(dataKelurahan['children'])), "TPS di Kelurahan ini")
+            listTPS = self.getChildrenID(dataKelurahan['children'])
+            for tps in listTPS:
+                print("TPS", tps)
+                print(dataKelurahan['data'][str(tps)]['sum'])
         elif dataKelurahan is None:
             print("Error: ID tidak ada")
         else:
