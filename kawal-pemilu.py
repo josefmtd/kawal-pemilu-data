@@ -38,13 +38,19 @@ class KawalPemilu:
         if dataKelurahan['depth'] == 4:
             #print("Ada", str(len(dataKelurahan['children'])), "TPS di Kelurahan ini")
             listTPS = self.getChildrenID(dataKelurahan['children'])
-            for tps in listTPS:
-                print("TPS", tps)
-                print(dataKelurahan['data'][str(tps)]['sum'])
+            print('Nama Kelurahan:', dataKelurahan['name'])
+            self.parseTPSData(dataKelurahan['data'],dataKelurahan['name'],listTPS)
         elif dataKelurahan is None:
             print("Error: ID tidak ada")
         else:
             print("Error: ID bukan Kelurahan")
+
+    def parseTPSData(self,dataKelurahan,namaKelurahan,listTPS):
+        for x in listTPS:
+            self.idTPS.append(namaKelurahan + str(x))
+            self.nolSatu.append(dataKelurahan[str(x)]['sum']['pas1'])
+            self.nolDua.append(dataKelurahan[str(x)]['sum']['pas2'])
+            self.suaraSah.append(dataKelurahan[str(x)]['sum']['sah'])
 
     def getDataTPSDaerah(totalTPS):
         dataTpsDaerah = []
