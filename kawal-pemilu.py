@@ -16,6 +16,28 @@ class KawalPemilu:
         data = json.loads(readURL.read())
         return data 
 
+    def getProvinsiData(self,id):
+        dataProvinsi = self.getKawalPemiluJSON(id)
+        if dataProvinsi['depth'] == 1:
+            listKabupaten = self.getChildrenID(dataProvinsi['children'])
+            for kabupaten in listKabupaten:
+                self.getKabupatenData(kabupaten)
+        elif dataProvinsi is None:
+            print("Error: ID tidak ada")
+        else:
+            print("Error: ID bukan Provinsi")
+
+    def getKabupatenData(self,id):
+        dataKabupaten = self.getKawalPemiluJSON(id)
+        if dataKabupaten['depth'] == 2:
+            listKecamatan = self.getChildrenID(dataKabupaten['children'])
+            for kecamatan in listKecamatan:
+                self.getKecamatanData(kecamatan)
+        elif dataKabupaten is None:
+            print("Error: ID tidak ada")
+        else:
+            print("Error: ID bukan Kabupaten")
+
     def getKecamatanData(self,id):
         dataKecamatan = self.getKawalPemiluJSON(id)
         if dataKecamatan['depth'] == 3:
