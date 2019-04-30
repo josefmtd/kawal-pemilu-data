@@ -19,7 +19,7 @@ class KawalPemilu:
     def getKecamatanData(self,id):
         dataKecamatan = self.getKawalPemiluJSON(id)
         if dataKecamatan['depth'] == 3:
-            listKelurahan = self.getKelurahanID(dataKecamatan['children'])
+            listKelurahan = self.getChildrenID(dataKecamatan['children'])
             for kelurahan in listKelurahan:
                 self.getKelurahanData(kelurahan)
         elif dataKecamatan is None:
@@ -27,11 +27,11 @@ class KawalPemilu:
         else:
             print("Error: ID bukan Kecamatan")
 
-    def getKelurahanID(self,kecamatanDataChildren):
-        listKelurahan = []
-        for x in kecamatanDataChildren:
-            listKelurahan.append(x[0])
-        return listKelurahan
+    def getChildrenID(self,parentChildren):
+        listChildren = []
+        for x in parentChildren:
+            listChildren.append(x[0])
+        return listChildren
 
     def getKelurahanData(self,id):
         dataKelurahan = self.getKawalPemiluJSON(id)
