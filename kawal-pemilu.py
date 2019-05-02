@@ -5,15 +5,19 @@ import time
 class KawalPemilu:
     def __init__(self):
         self.timeNow = time.time()*1000
-        self.idTPS = []
-        self.nolSatu = []
-        self.nolDua = []
-        self.suaraSah = []
+        self.namaTPS = ['Nama TPS']
+        self.idKelurahanTPS = ['ID Kelurahan']
+        self.nolSatu = ['Suara 01']
+        self.nolDua = ['Suara 02']
+        self.suaraSah = ['Suara Sah']
 
     def getKawalPemiluJSON(self,id):
+        tick = time.clock()
         urlAPI = "http://kawal-c1.appspot.com/api/c/" + str(id) + "?" + str(self.timeNow)
         readURL = urllib.request.urlopen(urlAPI)
         data = json.loads(readURL.read())
+        tock = time.clock()
+        print('Elapsed time:', str(tock-tick) + 's')
         return data 
 
     def getProvinsiData(self,id):
@@ -60,20 +64,23 @@ class KawalPemilu:
         if dataKelurahan['depth'] == 4:
             #print("Ada", str(len(dataKelurahan['children'])), "TPS di Kelurahan ini")
             listTPS = self.getChildrenID(dataKelurahan['children'])
-            print('Nama Kelurahan:', dataKelurahan['name'])
-            self.parseTPSData(dataKelurahan['data'],dataKelurahan['name'],listTPS)
+            tick = time.clock()
+            self.parseTPSData(dataKelurahan['data'],dataKelurahan['name'],listTPS,dataKelurahan['id'])
+            tock = time.clock()
+            print('Nama Kelurahan:', dataKelurahan['name'], 'Elapsed time:', str(tock-tick) + 's')
         elif dataKelurahan is None:
             print("Error: ID tidak ada")
         else:
             print("Error: ID bukan Kelurahan")
 
-    def parseTPSData(self,dataKelurahan,namaKelurahan,listTPS):
+    def parseTPSData(self,dataKelurahan,namaKelurahan,listTPS,idKelurahan):
         for x in listTPS:
             try:
-                self.idTPS.append(namaKelurahan + str(x))
                 self.nolSatu.append(dataKelurahan[str(x)]['sum']['pas1'])
                 self.nolDua.append(dataKelurahan[str(x)]['sum']['pas2'])
                 self.suaraSah.append(dataKelurahan[str(x)]['sum']['sah'])
+                self.namaTPS.append(namaKelurahan + " " + str(x))
+                self.idKelurahanTPS.append(idKelurahan)
             except KeyError:
                 continue
 
