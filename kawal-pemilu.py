@@ -5,11 +5,11 @@ import time
 class KawalPemilu:
     def __init__(self):
         self.timeNow = time.time()*1000
-        self.namaTPS = ['Nama TPS']
-        self.idKelurahanTPS = ['ID Kelurahan']
-        self.nolSatu = ['Suara 01']
-        self.nolDua = ['Suara 02']
-        self.suaraSah = ['Suara Sah']
+        self.namaTPS = []
+        self.idKelurahanTPS = []
+        self.nolSatu = []
+        self.nolDua = []
+        self.suaraSah = []
 
     def getKawalPemiluJSON(self,id):
         tick = time.clock()
