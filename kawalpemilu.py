@@ -20,7 +20,7 @@ class KawalPemilu:
 
     def getNationalData(self):
         dataNasional = self.getKawalPemiluJSON(0)
-	listProvinsi = self.getChildrenID(dataNasional['children'])
+        listProvinsi = self.getChildrenID(dataNasional['children'])
         for provinsi in listProvinsi:
             self.getProvinsiData(provinsi)
 
@@ -79,7 +79,7 @@ class KawalPemilu:
                 self.nolSatu.append(dataKelurahan[str(x)]['sum']['pas1'])
                 self.nolDua.append(dataKelurahan[str(x)]['sum']['pas2'])
                 self.suaraSah.append(dataKelurahan[str(x)]['sum']['sah'])
-		self.namaKelurahan.append(namaKelurahan, ',', namaParent[3], ',', namaParent[2], ',', namaParent[1])
+                self.namaKelurahan.append(namaKelurahan + ', ' + namaParent[3] + ', ' + namaParent[2] + ', ' + namaParent[1])
                 self.nomorTPS.append(str(x))
                 self.linkKP.append('https://kawalpemilu.org#' + str(idKelurahan))
             except KeyError:
