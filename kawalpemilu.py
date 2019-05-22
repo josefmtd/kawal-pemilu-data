@@ -1,6 +1,7 @@
 import urllib.request
 import json
 import time
+import pandas
 
 class KawalPemilu:
     def __init__(self):
@@ -21,15 +22,30 @@ class KawalPemilu:
     def getNationalData(self):
         dataNasional = self.getKawalPemiluJSON(0)
         listProvinsi = self.getChildrenID(dataNasional['children'])
-        for provinsi in listProvinsi:
-            self.getProvinsiData(provinsi)
+        listNamaProvinsi = self.getChildrenName(dataNasional['children'])
+        for x in range(len(listProvinsi)):
+            tic = time.time()
+            self.getProvinsiData(listProvinsi[x])
+            df = pandas.DataFrame({'Link KawalPemilu' : self.linkKP, 'Nama Kelurahan' : self.namaKelurahan,  'Nomor TPS' : self.nomorTPS, 'Suara 01' : self.nolSatu, 'Suara 02' : self.nolDua, 'Suara Sah' : self.suaraSah})
+            export_csv = df.to_csv(r'../kawal-pemilu-data/csv/' + listNamaProvinsi[x] + r'.csv', index = None, header = True)
+            toc = time.time()
+            print('Waktu pemrosesan data provinsi', listNamaProvinsi[x], 'selama', str(toc-tic), 'detik')
+            self.nomorTPS.clear()
+            self.namaKelurahan.clear()
+            self.linkKP.clear()
+            self.nolSatu.clear()
+            self.nolDua.clear()
+            self.suaraSah.clear()
 
     def getProvinsiData(self,id):
         dataProvinsi = self.getKawalPemiluJSON(id)
         if dataProvinsi['depth'] == 1:
             listKabupaten = self.getChildrenID(dataProvinsi['children'])
             for kabupaten in listKabupaten:
+                tic = time.time()
                 self.getKabupatenData(kabupaten)
+                toc = time.time()
+                print('Elapsed time:', str(toc-tic) + 's')
         elif dataProvinsi is None:
             print("Error: ID tidak ada")
         else:
@@ -62,6 +78,12 @@ class KawalPemilu:
         for x in parentChildren:
             listChildren.append(x[0])
         return listChildren
+
+    def getChildrenName(self,parentChildren):
+        listNameChildren = []
+        for x in parentChildren:
+            listNameChildren.append(x[1])
+        return listNameChildren
 
     def getKelurahanData(self,id):
         dataKelurahan = self.getKawalPemiluJSON(id)
